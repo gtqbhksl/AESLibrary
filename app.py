@@ -108,7 +108,10 @@ def getdata(sql):
 
 # 设置网址的路由
 @app.route('/index')
-def hello_world():
+def index():
+    user = session.get('username')
+    if not user:
+        return redirect('/')
     # 执行userlist函数将返回值赋给data
     data = userlist()
     # 使用render_template渲染index.html并传入数据data到前端
@@ -127,7 +130,7 @@ def login():
         if b == 1:
             # Create a session
             session['username'] = user
-            session['key'] = base64.b64encode(user.encode("utf-8"))
+            session['key'] = base64.b64encode(session['username'].encode("utf-8"))
             session['logged_in'] = True
             sql = 'update user set prikey="{}" where user="{}"'.format(session['key'], user)
             b = cur.execute(sql)
@@ -167,6 +170,9 @@ def userlist():
 @app.route('/add', methods=["post", "get"])
 def add():
     if request.method == "POST":
+        user = session.get('username')
+        if not user:
+            return redirect('/')
         # 获取前端表单里key来获取value值
         id = request.form.get('id')
         name = request.form.get('name')
@@ -203,6 +209,9 @@ def add():
 # 根据id进行删除
 @app.route('/dele', methods=["post", "get"])
 def dele():
+    user = session.get('username')
+    if not user:
+        return redirect('/')
     # 从前端表单中获取id的值
     id = request.args.get("id")
     # 执行sql命令，根据id删除内容
@@ -216,6 +225,9 @@ def dele():
 # 根据id进行查找
 @app.route('/sele', methods=["post", "get"])
 def sele():
+    user = session.get('username')
+    if not user:
+        return redirect('/')
     id = request.form.get("sele")
     sql = 'select * from authors where id in ({})'.format(id)
     cur = con.cursor()
@@ -245,6 +257,9 @@ def sele():
 # 根据名称进行查找
 @app.route('/sele1', methods=["post", "get"])
 def sele1():
+    user = session.get('username')
+    if not user:
+        return redirect('/')
     name = request.form.get("name")
     # 加密搜索，对要搜索的每个字进行加密拼接
     # if '?' in name:
@@ -288,6 +303,9 @@ def sele1():
 # 根据id进行修改
 @app.route('/updata', methods=['GET', 'POST'])
 def updata():
+    user = session.get('username')
+    if not user:
+        return redirect('/')
     id = request.args.get('id')
     sql = "select * from authors where id = %s" % id
     cur = con.cursor()
@@ -315,10 +333,14 @@ def updata():
 
 @app.route('/update', methods=['POST'])
 def update():
+    user = session.get('username')
+    if not user:
+        return redirect('/')
     id = request.form.get('id')
     name = request.form.get('name')
     books = request.form.get('books')
     price = request.form.get('price')
+    print(price)
     search = ''
     for i in books:
         aa = aes_encrypt(i)
@@ -327,9 +349,10 @@ def update():
                                                                                                 str(aes_encrypt(books)),
                                                                                                 str(aes_encrypt(price)),
                                                                                                 search, id)
+    print(sql)
     cur = con.cursor()
     cur.execute(sql)
-    # con.commit()
+    con.commit()
     return redirect('/index')
 
 
@@ -346,4 +369,4 @@ def logout():
 # 主函数执行
 if __name__ == '__main__':
     # 主动开启debug便于调试
-    app.run(debug=True)
+    app.run(debug=True,ssl_context=('suibianshishi.xyz.pem','suibianshishi.xyz.key',),host='suibianshishi.xyz',port=443)
