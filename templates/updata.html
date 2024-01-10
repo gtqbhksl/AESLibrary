@@ -13,7 +13,7 @@
     <form id="myform" style="align-content: center" action="/update" method="post">
         <div>
             <lable>编号：</lable>
-            <input type="text" readonly name="id" id="id" value="{{ data[0] }}" />
+            <input type="text" disabled name="id" id="id" value="{{ data[0] }}" />
         </div>
         <div style="margin-top: 30px">
             <lable>书名：</lable>
@@ -50,13 +50,12 @@
         let books = document.getElementById('books');
         let name = document.getElementById('name');
         let price = document.getElementById('price');
-
-        de_books = decryptData(books.value);
-        de_name = decryptData(name.value);
-        de_price = decryptData(price.value);
-        books.value = de_books;
-        name.value = de_name;
-        price.value = de_price;
+        books.value = decryptData(books.value);
+        name.value = decryptData(name.value);
+        price.value = decryptData(price.value);
+        books.disabled = false;
+        name.disabled = false;
+        price.disabled = false;
     }
     function encrypto_show(){
         let books = document.getElementById('books');
@@ -65,6 +64,9 @@
         books.value = encryptData(books.value);
         name.value = encryptData(name.value);
         price.value = encryptData(price.value);
+        books.disabled = true;
+        name.disabled = true;
+        price.disabled = true;
     }
     function decryptData(encryptedData) {
         // 解密密钥
