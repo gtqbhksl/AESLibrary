@@ -31,7 +31,7 @@
     <h2>查询成功</h2>
     <button class="btn btn-outline-success" onclick="show()">解密数据</button>
     <button class="btn btn-outline-success" onclick="encrypto_show()">加密数据</button>
-    <table class="table table-bordered" id="table">
+    <table class="table table-bordered" id="table" style="table-layout: fixed">
     <tr>
         <th>id</th>
         <th>书名</th>
@@ -113,6 +113,13 @@
 <script src="static/vendor/waypoints/noframework.waypoints.js"></script>
 <script src="static/js/main.js"></script>
 <script src="../static/jquery-3.4.1.js"></script>
+<style>
+td {
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+}
+</style>
 <script>
     function dele(id) {
         location.href = '/dele?id=' + id

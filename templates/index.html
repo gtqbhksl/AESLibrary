@@ -74,7 +74,7 @@
                 <button  class="btn btn-outline-success" onclick="encrypto_show()">加密数据</button>
                 <br>
 
-                <table class="table table-bordered">
+                <table class="table table-bordered" style="table-layout: fixed">
                     <tr>
                         <th>图书编号</th>
                         <th>书名</th>
@@ -102,8 +102,6 @@
                         var s3 = document.getElementsByTagName("table")[1]; //获取第2个表格
                         for(var i=1;i<s3.rows.length;i++){
                             for(var j=1;j<s3.rows[i].cells.length - 1;j++){
-                                //console.log(s3.rows[i].cells[j]);
-                                console.log(decryptData(s3.rows[i].cells[j].textContent));
                                 s3.rows[i].cells[j].textContent = decryptData(s3.rows[i].cells[j].textContent);
                             }
                         }
@@ -113,9 +111,8 @@
                         var s3 = document.getElementsByTagName("table")[1]; //获取第2个表格
                         for(var i=1;i<s3.rows.length;i++){
                             for(var j=1;j<s3.rows[i].cells.length - 1;j++){
-                                //console.log(s3.rows[i].cells[j]);
-                                console.log(encryptData(s3.rows[i].cells[j].textContent));
                                 s3.rows[i].cells[j].textContent = encryptData(s3.rows[i].cells[j].textContent);
+                                //s3.rows[i].cells[j].textContent = '***';
                             }
                         }
                     }
@@ -125,7 +122,6 @@
                         // 使用sjcl库对加密数据进行解密
                         //console.log(JSON.stringify(encryptedData));
                         var decryptedData = sjcl.decrypt(decryptionKey, encryptedData);
-                        console.log(decryptedData);
                         return decryptedData;
                     }
                     function encryptData(cryptedData) {
@@ -134,7 +130,6 @@
                         // 使用sjcl库对加密数据进行解密
                         //console.log(JSON.stringify(encryptedData));
                         var decryptedData = sjcl.encrypt(decryptionKey, cryptedData);
-                        console.log(decryptedData);
                         return decryptedData;
                     }
                     function encrypto_add(){
@@ -173,6 +168,13 @@
 <script src="static/js/main.js"></script>
 <script src="../static/jquery-3.4.1.js"></script>
 </body>
+<style>
+td {
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+}
+</style>
 
 <script>
     function dele(id) {
